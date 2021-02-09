@@ -10,9 +10,8 @@ namespace Lexico1
         {
             identificador, numero, asignacion, inicializacion, 
             finSentencia, operadorLogico, operadorRelacional, 
-            operadorTermino, operadorFactor, cadena, operadorTernario,
-            caracter
-            
+            operadorTermino, operadorFactor, incrementoTermino,
+            incrementoFactor, cadena, operadorTernario, caracter            
         }
         private string contenido;
         private clasificaciones clasificacion;
