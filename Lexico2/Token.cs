@@ -11,7 +11,8 @@ namespace Lexico2
             identificador, numero, asignacion, inicializacion,
             finSentencia, operadorLogico, operadorRelacional,
             operadorTermino, operadorFactor, incrementoTermino,
-            incrementoFactor, cadena, operadorTernario, caracter
+            incrementoFactor, cadena, operadorTernario, caracter,
+            tipoDato, zona, condicion, ciclo,
         }
         private string contenido;
         private clasificaciones clasificacion;
