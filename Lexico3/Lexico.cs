@@ -5,6 +5,9 @@ using System.IO;
 
 // Requerimiento 1: Levantar la excepción en caso de error e identificar el tipo de error.
 // Requerimiento 2: Indicar en que línea y caracter se encuentra el error.
+// Requerimiento 3: Agregar el token "{" y "}" en la matriz trand6x. Nota: Agregar las columnas {,}.
+// Requerimiento 4: Agregar los comentarios de línea y multilínea. Nota: Agregar la columna #10.
+// Requerimiento 5: Grabar en el archivo log los errores léxicos.
 namespace Lexico3
 {
     class Lexico: Token, IDisposable
@@ -50,7 +53,7 @@ namespace Lexico3
 
         public Lexico()
         {
-            linea = caracter = 0;
+            linea = caracter = 1;
 
             Console.WriteLine("Compilando prueba.txt");
 
@@ -98,10 +101,21 @@ namespace Lexico3
                 if (estado >= 0)
                 {
                     archivo.Read();
+                    caracter++;
+
+                    if (transicion == 10)
+                    {
+                        linea++;
+                        caracter = 1;
+                    }
 
                     if (estado > 0)
                     {
                         palabra += transicion;
+                    }
+                    else
+                    {
+                        palabra = "";
                     }
                 }
             }
