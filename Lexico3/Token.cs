@@ -12,7 +12,7 @@ namespace Lexico3
             finSentencia, operadorLogico, operadorRelacional,
             operadorTermino, operadorFactor, incrementoTermino,
             incrementoFactor, cadena, operadorTernario, caracter,
-            tipoDato, zona, condicion, ciclo,
+            tipoDato, zona, condicion, ciclo, inicioBloque, finBloque
         }
         private string contenido;
         private clasificaciones clasificacion;
