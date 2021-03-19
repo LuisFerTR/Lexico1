@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-// Requerimiento 1: Levantar la excepción en caso de error e identificar el tipo de error.
-// Requerimiento 2: Indicar en que línea y caracter se encuentra el error.
-// Requerimiento 3: Agregar el token "{" y "}" en la matriz trand6x. Nota: Agregar las columnas {,}.
-// Requerimiento 4: Agregar los comentarios de línea y multilínea. Nota: Agregar la columna #10.
-// Requerimiento 5: Grabar en el archivo log los errores léxicos.
+// Requerimiento 1: Levantar la excepción en caso de error e identificar el tipo de error. ✓
+// Requerimiento 2: Indicar en que línea y caracter se encuentra el error. ✓
+// Requerimiento 3: Agregar el token "{" y "}" en la matriz trand6x. Nota: Agregar las columnas {,}. ✓
+// Requerimiento 4: Agregar los comentarios de línea y multilínea. Nota: Agregar la columna #10. ✓
+// Requerimiento 5: Grabar en el archivo log los errores léxicos. ✓
 namespace Lexico3
 {
     class Lexico: Token, IDisposable
@@ -17,39 +17,45 @@ namespace Lexico3
         int linea, caracter;
         const int F = -1;
         const int E = -2;
-        int[,] trand6x = { // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La
-                            {  0, 0, 1, 2,29,17,18, 1, 8, 9,11,12,13,15,26,27,20,20,20,22,24,28,29 },
-                            {  F, F, 1, 1, F, F, F, 1, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, 2, 3, F, F, 5, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  E, E, E, 4, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },
-                            {  F, F, F, 4, F, F, F, 5, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  E, E, E, 7, E, 6, 6, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },
-                            {  E, E, E, 7, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },
-                            {  F, F, F, 7, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,10, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F,14, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F,14, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F,19, F, F,19, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F,19, F,19, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,21, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            { 22, E,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,23,22,22,22 },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            { 24, E,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,25,24,24 },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F,16, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },
-                            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La
-                             };
+        int[,] trand6x = { // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
+                            {  0, F, 1, 2,29,17,18, 1, 8, 9,11,12,13,15,26,27,20,32,20,22,24,28,29,30,31, 0 },//0
+                            {  F, F, 1, 1, F, F, F, 1, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//1
+                            {  F, F, F, 2, 3, F, F, 5, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//2
+                            {  E, E, E, 4, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },//3
+                            {  F, F, F, 4, F, F, F, 5, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//4
+                            {  E, E, E, 7, E, 6, 6, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },//5
+                            {  E, E, E, 7, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E, E },//6
+                            {  F, F, F, 7, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//7
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//8
+                            {  F, F, F, F, F, F, F, F,10, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//9
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//10
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//11
+                            {  F, F, F, F, F, F, F, F, F, F, F,14, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//12
+                            {  F, F, F, F, F, F, F, F, F, F, F, F,14, F, F, F, F, F, F, F, F, F, F, F, F, F },//13
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//14
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//15
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//16
+                            {  F, F, F, F, F,19, F, F,19, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//17
+                            {  F, F, F, F, F, F,19, F,19, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//18
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//19
+                            {  F, F, F, F, F, F, F, F,21, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//20
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//21
+                            { 22, E,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,23,22,22,22,22,22,22 },//22
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//23
+                            { 24, E,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,25,24,24,24,24,24 },//24
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//25
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//26
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F },//27
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//28
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//29
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//30
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//31
+                            {  F, F, F, F, F, F, F, F,21, F, F, F, F, F, F, F,34,33, F, F, F, F, F, F, F, F },//32
+                            { 33, 0,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33, 0 },//33
+                            { 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,34,34,34,34,34,34,34,34,34 },//34
+                            { 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35, 0,34,34,34,34,34,34,34,34 },//35
+                            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
+                            };
 
         public Lexico()
         {
@@ -109,7 +115,7 @@ namespace Lexico3
                         caracter = 1;
                     }
 
-                    if (estado > 0)
+                    if (estado > 0 && estado < 33)
                     {
                         palabra += transicion;
                     }
@@ -118,6 +124,11 @@ namespace Lexico3
                         palabra = "";
                     }
                 }
+            }
+
+            if (estado == -2)
+            {
+                errorLexico(linea, caracter);
             }
 
             setContenido(palabra);
@@ -148,8 +159,30 @@ namespace Lexico3
                     break;
             }
 
-            bitacora.WriteLine("Token = " + getContenido());
-            bitacora.WriteLine("Clasificacion = " + getClasificacion());
+            if (!string.IsNullOrWhiteSpace(palabra))
+            {
+                bitacora.WriteLine("Token = " + getContenido());
+                bitacora.WriteLine("Clasificacion = " + getClasificacion());
+            }
+        }
+
+        private void errorLexico(int linea, int caracter)
+        {
+            clasificaciones clasif = getClasificacion();
+            string mensaje = "Error léxico linea " + linea + " caracter " + caracter + ": ";
+
+            if (clasif == clasificaciones.cadena)
+            {
+                mensaje += "Se esperaban comillas (\") o comilla (') de cierre.";
+                bitacora.WriteLine(mensaje);
+                throw new Exception(mensaje);
+            }
+            else if (clasif == clasificaciones.numero)
+            {
+                mensaje += "Se esperaba un dígito.";
+                bitacora.WriteLine(mensaje);
+                throw new Exception(mensaje);
+            }
         }
 
         private void clasificar(int estado)
@@ -164,6 +197,12 @@ namespace Lexico3
                     break;
                 case 8:
                     setClasificacion(clasificaciones.asignacion);
+                    break;
+                case 30:
+                    setClasificacion(clasificaciones.inicioBloque);
+                    break;
+                case 31:
+                    setClasificacion(clasificaciones.finBloque);
                     break;
                 case 9:
                 case 12:
@@ -194,6 +233,7 @@ namespace Lexico3
                     setClasificacion(clasificaciones.incrementoTermino);
                     break;
                 case 20:
+                case 32:
                     setClasificacion(clasificaciones.operadorFactor);
                     break;
                 case 21:
@@ -211,10 +251,14 @@ namespace Lexico3
 
         private int columna(char t)
         {
-            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La
+            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
             if (FinDeArchivo())
             {
                 return 1;
+            }
+            else if (t == 10)
+            {
+                return 25;
             }
             else if (char.IsWhiteSpace(t))
             {
@@ -300,11 +344,19 @@ namespace Lexico3
             {
                 return 21;
             }
+            else if (t == '{')
+            {
+                return 23;
+            }
+            else if (t == '}')
+            {
+                return 24;
+            }
             else 
             {
                 return 22;
             }
-            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La
+            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
         }
 
         public bool FinDeArchivo()
