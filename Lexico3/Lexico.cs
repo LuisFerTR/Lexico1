@@ -52,8 +52,8 @@ namespace Lexico3
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//31
                             {  F, F, F, F, F, F, F, F,21, F, F, F, F, F, F, F,34,33, F, F, F, F, F, F, F, F },//32
                             { 33, 0,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33, 0 },//33
-                            { 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,34,34,34,34,34,34,34,34,34 },//34
-                            { 34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35, 0,34,34,34,34,34,34,34,34 },//35
+                            { 34, E,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,34,34,34,34,34,34,34,34,34 },//34
+                            { 34, E,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35, 0,34,34,34,34,34,34,34,34 },//35
                             // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
                             };
 
@@ -129,38 +129,37 @@ namespace Lexico3
             if (estado == -2)
             {
                 errorLexico(linea, caracter);
-            }
-
-            setContenido(palabra);
-            switch (palabra)
+            }            
+            else if (palabra != "")
             {
-                case "char":
-                case "int":
-                case "float":
-                    setClasificacion(clasificaciones.tipoDato);
-                    break;
+                setContenido(palabra);
+                switch (palabra)
+                {
+                    case "char":
+                    case "int":
+                    case "float":
+                        setClasificacion(clasificaciones.tipoDato);
+                        break;
 
-                case "private":
-                case "public":
-                case "protected":
-                    setClasificacion(clasificaciones.zona);
-                    break;
+                    case "private":
+                    case "public":
+                    case "protected":
+                        setClasificacion(clasificaciones.zona);
+                        break;
 
-                case "if":
-                case "else":
-                case "switch":
-                    setClasificacion(clasificaciones.condicion);
-                    break;
+                    case "if":
+                    case "else":
+                    case "switch":
+                        setClasificacion(clasificaciones.condicion);
+                        break;
 
-                case "for":
-                case "while":
-                case "do":
-                    setClasificacion(clasificaciones.ciclo);
-                    break;
-            }
+                    case "for":
+                    case "while":
+                    case "do":
+                        setClasificacion(clasificaciones.ciclo);
+                        break;
+                }
 
-            if (!string.IsNullOrWhiteSpace(palabra))
-            {
                 bitacora.WriteLine("Token = " + getContenido());
                 bitacora.WriteLine("Clasificacion = " + getClasificacion());
             }
@@ -174,15 +173,18 @@ namespace Lexico3
             if (clasif == clasificaciones.cadena)
             {
                 mensaje += "Se esperaban comillas (\") o comilla (') de cierre.";
-                bitacora.WriteLine(mensaje);
-                throw new Exception(mensaje);
             }
             else if (clasif == clasificaciones.numero)
             {
                 mensaje += "Se esperaba un dígito.";
-                bitacora.WriteLine(mensaje);
-                throw new Exception(mensaje);
             }
+            else
+            {
+                mensaje += "Se esperaba un cierre de comentario (*/)";                
+            }
+
+            bitacora.WriteLine(mensaje);
+            throw new Exception(mensaje);
         }
 
         private void clasificar(int estado)
