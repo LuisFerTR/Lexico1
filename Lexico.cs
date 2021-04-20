@@ -57,6 +57,7 @@ namespace sintaxis1
             linea = caracter = 1;
 
             Console.WriteLine("Compilando prueba.txt");
+            Console.WriteLine("Iniciando analisis lexico.");
 
             if (File.Exists("C:\\Archivos\\prueba.txt"))
             {
@@ -64,9 +65,38 @@ namespace sintaxis1
                 bitacora = new StreamWriter("C:\\Archivos\\prueba.log");
                 bitacora.AutoFlush = true;
 
+                DateTime fechaActual = DateTime.Now;
+
                 bitacora.WriteLine("Archivo: prueba.txt");
                 bitacora.WriteLine("Directorio: C:\\Archivos");
-                bitacora.WriteLine("Fecha: 19 de abril del 2021 12:21");
+                bitacora.WriteLine("Fecha: " + fechaActual);
+            }
+            else
+            {
+                throw new Exception("El archivo prueba.txt no existe.");
+            }
+
+        }
+        public Lexico(string nombre)
+        {
+            linea = caracter = 1;
+
+            Console.WriteLine("Compilando " + nombre);
+            Console.WriteLine("Iniciando analisis lexico.");
+
+            if (File.Exists(nombre))
+            {
+                archivo = new StreamReader(nombre);
+
+                string log = Path.ChangeExtension(nombre, "log");
+                bitacora = new StreamWriter(log);
+                bitacora.AutoFlush = true;
+                
+                DateTime fechaActual = DateTime.Now;
+
+                bitacora.WriteLine("Archivo: " + nombre);
+                bitacora.WriteLine("Directorio: ");
+                bitacora.WriteLine("Fecha: " + fechaActual);
             }
             else
             {
@@ -87,7 +117,7 @@ namespace sintaxis1
             bitacora.Close();
         }
 
-        public void NextToken()
+        protected void NextToken()
         {
             char transicion;
             string palabra = "";

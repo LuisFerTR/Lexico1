@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-// Requerimiento 1: Agregar en el archivo log la fecha y la hora de compilación.
 
 namespace sintaxis1
 {
@@ -10,10 +9,17 @@ namespace sintaxis1
     {
         public Sintaxis()
         {
+            Console.WriteLine("Iniciando analisis sintactico.");
             NextToken();
         }
 
-        public void match(string espera)
+        public Sintaxis(string nombre): base(nombre)
+        {
+            Console.WriteLine("Iniciando analisis sintactico.");
+            NextToken();
+        }
+
+        protected void match(string espera)
         {
             if (espera == getContenido())
             {
@@ -25,7 +31,7 @@ namespace sintaxis1
             }
         }
 
-        public void match(clasificaciones espera)
+        protected void match(clasificaciones espera)
         {
             if (espera == getClasificacion())
             {
