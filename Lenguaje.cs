@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-// Requerimiento 2: Ajustar el constructor Lexico(string) para que substraiga el nombre del archivo
-// y el directorio y genere el log correspondiente.
-// Ejemplo: suma.txt, suma.log
+// Requerimiento 1: Ajustar el constructor Lexico(string) para que substraiga el nombre del archivo
+// y el directorio.
 
 namespace sintaxis1
 {
