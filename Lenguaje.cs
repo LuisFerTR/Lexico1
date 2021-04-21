@@ -26,8 +26,25 @@ namespace sintaxis1
             Main();
         }
 
-        // Libreria -> #include <identificador.h>
+        // Libreria -> (#include <identificador.h> Libreria) ?
         private void Libreria()
+        {
+            if (getContenido() == "#")
+            {
+                match("#");
+                match("include");
+                match("<");
+                match(Token.clasificaciones.identificador);
+                match(".");
+                match("h");
+                match(">");
+            
+                Libreria();
+            }
+        }
+
+        // Libreria -> #include <identificador.h> Libreria ?
+        private void Libreria2()
         {
             match("#");
             match("include");
@@ -36,12 +53,58 @@ namespace sintaxis1
             match(".");
             match("h");
             match(">");
+
+            if (getContenido() == "#")
+            {
+                Libreria2();
+            }
         }
 
-        // Main -> void main() { numero } 
+        // Main -> void main() { (Variables)? identificador := numero; } 
         private void Main()
         {
+            match("void");
+            match("main");
+            match("(");
+            match(")");
+            match(clasificaciones.inicioBloque);
 
+            if (getClasificacion() == clasificaciones.tipoDato)
+            {
+                Variables();
+            }            
+
+            match(clasificaciones.identificador);
+            match(clasificaciones.inicializacion);
+            match(clasificaciones.numero);
+            match(clasificaciones.finSentencia);
+            match(clasificaciones.finBloque);
         }
+
+        // Lista_IDs -> identificador (,Lista_IDs)?
+        private void Lista_IDs()
+        {
+            match(clasificaciones.identificador);
+
+            if (getContenido() == ",")
+            {
+                match(",");
+                Lista_IDs();
+            }
+        }
+
+        // Variables -> tipoDato Lista_IDs; (Variables)?
+        private void Variables()
+        {
+            match(clasificaciones.tipoDato);
+            Lista_IDs();
+            match(clasificaciones.finSentencia);
+
+            if (getClasificacion() == clasificaciones.tipoDato)
+            {
+                Variables();
+            }
+        }
+
     }
 }
