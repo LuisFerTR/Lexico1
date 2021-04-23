@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-<<<<<<< HEAD
-namespace sintaxis1
-=======
 namespace sintaxis3
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
 {
     class Token
     {

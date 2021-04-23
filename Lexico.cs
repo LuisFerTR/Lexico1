@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-<<<<<<< HEAD
-namespace sintaxis1
-=======
 namespace sintaxis3
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
 {
     class Lexico: Token, IDisposable
     {
@@ -95,11 +91,7 @@ namespace sintaxis3
                 string log = Path.ChangeExtension(nombre, "log");
                 bitacora = new StreamWriter(log);
                 bitacora.AutoFlush = true;
-<<<<<<< HEAD
-                
-=======
 
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
                 DateTime fechaActual = DateTime.Now;
 
                 bitacora.WriteLine("Archivo: " + nombre);
@@ -108,23 +100,15 @@ namespace sintaxis3
             }
             else
             {
-<<<<<<< HEAD
-                throw new Exception("El archivo prueba.txt no existe.");
-=======
                 string mensaje = String.Format("El archivo no existe.");
                 throw new Exception(mensaje);
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
             }
 
         }
         //~Lexico()
         public void Dispose()
         {
-<<<<<<< HEAD
             Console.WriteLine("Finaliza compilacion de prueba.txt");
-=======
-            Console.WriteLine("Finaliza compilacion de ");
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
             CerrarArchivos();
         }
 

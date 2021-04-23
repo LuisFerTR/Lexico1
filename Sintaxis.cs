@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-<<<<<<< HEAD
 
-namespace sintaxis1
-=======
 namespace sintaxis3
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
 {
     class Sintaxis: Lexico
     {
@@ -17,11 +13,7 @@ namespace sintaxis3
             NextToken();
         }
 
-<<<<<<< HEAD
         public Sintaxis(string nombre): base(nombre)
-=======
-        public Sintaxis(string nombre) : base(nombre)
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
         {
             Console.WriteLine("Iniciando analisis sintactico.");
             NextToken();

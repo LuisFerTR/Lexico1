@@ -1,10 +1,6 @@
 ﻿using System;
 
-<<<<<<< HEAD
-namespace sintaxis1
-=======
 namespace sintaxis3
->>>>>>> ccfe9b2 (Agregar archivos de proyecto.)
 {
     class Program
     {
