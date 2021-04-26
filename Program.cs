@@ -8,7 +8,7 @@ namespace sintaxis3
         {
             try
             {
-                using (Lenguaje l = new Lenguaje("C:\\Archivos\\suma.txt"))
+                using (Lenguaje l = new Lenguaje("C:\\Archivos\\suma.cpp"))
                 {
                     /*while (!l.FinDeArchivo())
                     {

@@ -5,6 +5,7 @@ using System.Text;
 // Requerimiento 1: Separar el nombre del archivo y el directorio en el constructor Lexico(string)
 // Requerimiento 2: Validar en el constructor Lexico(string) que la extensión del archivo deba de ser
 // cpp y levantar una excepción en caso contrario.
+// Requerimiento 3: Identificar errores sintácticos con línea y caracter y grabarlos en el log.
 
 namespace sintaxis3
 {
@@ -49,41 +50,21 @@ namespace sintaxis3
             }
         }
 
-        // Libreria -> #include <identificador(.h)?> Libreria ?
-        private void Libreria2()
-        {
-            match("#");
-            match("include");
-            match("<");
-            match(Token.clasificaciones.identificador);
-
-            if (getContenido() == ".")
-            {
-                match(".");
-                match("h");
-            }
-
-            match(">");
-
-            if (getContenido() == "#")
-            {
-                Libreria2();
-            }
-        }
-
         // Main -> void main() { (Variables)? Instrucciones } 
         private void Main()
         {
-            match("void");
+            match(clasificaciones.tipoDato);
             match("main");
             match("(");
             match(")");
-            match(clasificaciones.inicioBloque);
 
-            if (getClasificacion() == clasificaciones.tipoDato)
-            {
-                Variables();
-            }
+            BloqueInstrucciones();            
+        }
+
+        // BloqueInstrucciones -> { Instrucciones }
+        private void BloqueInstrucciones()
+        {
+            match(clasificaciones.inicioBloque);
 
             Instrucciones();
 
@@ -102,23 +83,26 @@ namespace sintaxis3
             }
         }
 
-        // Variables -> tipoDato Lista_IDs; (Variables)?
+        // Variables -> tipoDato Lista_IDs; 
         private void Variables()
         {
             match(clasificaciones.tipoDato);
             Lista_IDs();
-            match(clasificaciones.finSentencia);
-
-            if (getClasificacion() == clasificaciones.tipoDato)
-            {
-                Variables();
-            }
+            match(clasificaciones.finSentencia);           
         }
 
         // Instruccion -> (inicializacion | printf(cadena | identificador | numero)) ;
         private void Instruccion()
         {
-            if (getContenido() == "printf")
+            if (getContenido() == "const")
+            {
+                Constante();
+            }
+            else if (getClasificacion() == clasificaciones.tipoDato)
+            {
+                Variables();
+            }
+            else if (getContenido() == "printf")
             {
                 match("printf");
                 match("(");
@@ -137,11 +121,12 @@ namespace sintaxis3
                 }
 
                 match(")");
+                match(clasificaciones.finSentencia);
             }
             else
             {
                 match(clasificaciones.identificador);
-                match(clasificaciones.inicializacion);
+                match(clasificaciones.asignacion);
 
                 if (getClasificacion() == clasificaciones.numero)
                 {
@@ -156,9 +141,10 @@ namespace sintaxis3
                     match(clasificaciones.identificador);
                 }
 
+                match(clasificaciones.finSentencia);
             }
 
-            match(clasificaciones.finSentencia);
+            
         }
 
         // Instrucciones -> Instruccion Instrucciones?
@@ -166,10 +152,30 @@ namespace sintaxis3
         {
             Instruccion();
 
-            if (getClasificacion() == clasificaciones.identificador)
+            if (getClasificacion() != clasificaciones.finBloque)
             {
                 Instrucciones();
             }
+        }
+
+        // Constante -> const tipoDato identificador = numero | cadena;
+        private void Constante()
+        {
+            match("const");
+            match(clasificaciones.tipoDato);
+            match(clasificaciones.identificador);
+            match(clasificaciones.asignacion);
+
+            if (getClasificacion() == clasificaciones.numero)
+            {
+                match(clasificaciones.numero);
+            }
+            else
+            {
+                match(clasificaciones.cadena);
+            }
+            
+            match(clasificaciones.finSentencia);
         }
     }
 }

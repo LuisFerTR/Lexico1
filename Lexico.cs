@@ -165,6 +165,7 @@ namespace sintaxis3
                     case "char":
                     case "int":
                     case "float":
+                    case "string":
                         setClasificacion(clasificaciones.tipoDato);
                         break;
 

@@ -21,6 +21,7 @@ namespace sintaxis3
 
         protected void match(string espera)
         {
+            // Console.WriteLine(getContenido() + " = " + espera);
             if (espera == getContenido())
             {
                 NextToken();
@@ -33,6 +34,7 @@ namespace sintaxis3
 
         protected void match(clasificaciones espera)
         {
+            // Console.WriteLine(getContenido() + " = " + espera);
             if (espera == getClasificacion())
             {
                 NextToken();
