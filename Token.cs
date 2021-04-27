@@ -12,7 +12,8 @@ namespace sintaxis3
             finSentencia, operadorLogico, operadorRelacional,
             operadorTermino, operadorFactor, incrementoTermino,
             incrementoFactor, cadena, operadorTernario, caracter,
-            tipoDato, zona, condicion, ciclo, inicioBloque, finBloque
+            tipoDato, zona, condicion, ciclo, inicioBloque, finBloque,
+            flujoEntrada, flujoSalida
         }
         private string contenido;
         private clasificaciones clasificacion;

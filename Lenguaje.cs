@@ -6,6 +6,8 @@ using System.Text;
 // Requerimiento 2: Validar en el constructor Lexico(string) que la extensión del archivo deba de ser
 // cpp y levantar una excepción en caso contrario.
 // Requerimiento 3: Identificar errores sintácticos con línea y caracter y grabarlos en el log.
+// Requerimiento 4: Agregar el token flujo de entrada (<<) y flujo de salida (>>) en el análisis léxico.
+// Requerimiento 5: Implementar el if.
 
 namespace sintaxis3
 {
@@ -94,35 +96,27 @@ namespace sintaxis3
         // Instruccion -> (inicializacion | printf(cadena | identificador | numero)) ;
         private void Instruccion()
         {
-            if (getContenido() == "const")
+            if (getContenido() == "cin")
+            {
+                match("cin");
+                match(">");
+                match(clasificaciones.identificador);
+                match(clasificaciones.finSentencia);
+            }
+            else if (getContenido() == "cout")
+            {
+                match("cout");
+                ListaFlujoSalida();
+                match(clasificaciones.finSentencia);
+            }
+            else if (getContenido() == "const")
             {
                 Constante();
             }
             else if (getClasificacion() == clasificaciones.tipoDato)
             {
                 Variables();
-            }
-            else if (getContenido() == "printf")
-            {
-                match("printf");
-                match("(");
-
-                if (getClasificacion() == clasificaciones.numero)
-                {
-                    match(clasificaciones.numero);
-                }
-                else if (getClasificacion() == clasificaciones.cadena)
-                {
-                    match(clasificaciones.cadena);
-                }
-                else
-                {
-                    match(clasificaciones.identificador);
-                }
-
-                match(")");
-                match(clasificaciones.finSentencia);
-            }
+            }            
             else
             {
                 match(clasificaciones.identificador);
@@ -177,5 +171,33 @@ namespace sintaxis3
             
             match(clasificaciones.finSentencia);
         }
+
+        // ListaFlujoSalida -> << cadena | identificador | numero (ListaFlujoSalida)?
+        private void ListaFlujoSalida()
+        {
+            match("<");
+
+            if (getClasificacion() == clasificaciones.numero)
+            {
+                match(clasificaciones.numero);
+            }
+            else if (getClasificacion() == clasificaciones.cadena)
+            {
+                match(clasificaciones.cadena);
+            }
+            else
+            {
+                match(clasificaciones.identificador);
+            }
+
+            if (getContenido() == "<")
+            {
+                ListaFlujoSalida();
+            }
+        }
+
+        // if -> if (Condicion) BloqueInstrucciones (else BloqueInstrucciones)? 
+
+        // Condicion -> identificador operadorRelacional identificador 
     }
 }
