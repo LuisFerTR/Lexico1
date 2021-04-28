@@ -9,7 +9,8 @@ namespace sintaxis3
     {
         private StreamReader archivo;
         private StreamWriter bitacora;
-        int linea, caracter;
+        string nombreArchivo;
+        protected int linea, caracter;
         const int F = -1;
         const int E = -2;
         int[,] trand6x = { // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
@@ -39,8 +40,8 @@ namespace sintaxis3
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//23
                             { 24, E,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,25,24,24,24,24,24 },//24
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//25
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//26
-                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F,16, F, F, F, F, F, F, F, F, F, F, F },//27
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F, 36, F, F, F, F, F, F, F, F, F, F, F },//26
+                            {  F, F, F, F, F, F, F, F,16, F, F, F, F, F,16,37, F, F, F, F, F, F, F, F, F, F },//27
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//28
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//29
                             {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//30
@@ -49,31 +50,34 @@ namespace sintaxis3
                             { 33, 0,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33, 0 },//33
                             { 34, E,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35,34,34,34,34,34,34,34,34,34 },//34
                             { 34, E,34,34,34,34,34,34,34,34,34,34,34,34,34,34,35, 0,34,34,34,34,34,34,34,34 },//35
-                            // WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//36
+                            {  F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F },//37
+                            //WS,EF, L, D, ., +, -, E, =, :, ;, &, |, !, >, <, *, /, %, ", ', ?,La, {, },#10
                             };
 
         public Lexico()
         {
             linea = caracter = 1;
+            nombreArchivo = "prueba.cpp";
 
-            Console.WriteLine("Compilando prueba.txt");
+            Console.WriteLine("Compilando prueba.cpp");
             Console.WriteLine("Iniciando analisis lexico.");
 
-            if (File.Exists("C:\\Archivos\\prueba.txt"))
+            if (File.Exists("C:\\Archivos\\prueba.cpp"))
             {
-                archivo = new StreamReader("C:\\Archivos\\prueba.txt");
+                archivo = new StreamReader("C:\\Archivos\\prueba.cpp");
                 bitacora = new StreamWriter("C:\\Archivos\\prueba.log");
                 bitacora.AutoFlush = true;
 
                 DateTime fechaActual = DateTime.Now;
 
-                bitacora.WriteLine("Archivo: prueba.txt");
+                bitacora.WriteLine("Archivo: prueba.cpp");
                 bitacora.WriteLine("Directorio: C:\\Archivos");
                 bitacora.WriteLine("Fecha: " + fechaActual);
             }
             else
             {
-                throw new Exception("El archivo prueba.txt no existe.");
+                throw new Exception("El archivo prueba.cpp no existe.");
             }
 
         }
@@ -81,11 +85,19 @@ namespace sintaxis3
         {
             linea = caracter = 1;
 
-            Console.WriteLine("Compilando " + nombre);
+            nombreArchivo = Path.GetFileName(nombre);
+            string nombreDir = Path.GetDirectoryName(nombre);
+
+            Console.WriteLine("Compilando " + nombreArchivo);
             Console.WriteLine("Iniciando analisis lexico.");
 
             if (File.Exists(nombre))
             {
+                if (Path.GetExtension(nombre) != ".cpp")
+                {
+                    throw new Exception(String.Format("El archivo {0} no es un archivo cpp.", nombreArchivo));
+                }
+
                 archivo = new StreamReader(nombre);
 
                 string log = Path.ChangeExtension(nombre, "log");
@@ -94,13 +106,13 @@ namespace sintaxis3
 
                 DateTime fechaActual = DateTime.Now;
 
-                bitacora.WriteLine("Archivo: " + nombre);
-                bitacora.WriteLine("Directorio: ");
+                bitacora.WriteLine("Archivo: " + nombreArchivo);
+                bitacora.WriteLine("Directorio: " + nombreDir);
                 bitacora.WriteLine("Fecha: " + fechaActual);
             }
             else
             {
-                string mensaje = String.Format("El archivo no existe.");
+                string mensaje = String.Format("El archivo {0} no existe.", nombreArchivo);
                 throw new Exception(mensaje);
             }
 
@@ -108,7 +120,7 @@ namespace sintaxis3
         //~Lexico()
         public void Dispose()
         {
-            Console.WriteLine("Finaliza compilacion de prueba.txt");
+            Console.WriteLine("Finaliza compilacion de " + nombreArchivo);
             CerrarArchivos();
         }
 
@@ -142,7 +154,7 @@ namespace sintaxis3
                         caracter = 1;
                     }
 
-                    if (estado > 0 && estado < 33)
+                    if ((estado > 0 && estado < 33) || estado >= 36)
                     {
                         palabra += transicion;
                     }
@@ -275,6 +287,12 @@ namespace sintaxis3
                     break;
                 case 28:
                     setClasificacion(clasificaciones.operadorTernario);
+                    break;
+                case 36:
+                    setClasificacion(clasificaciones.flujoSalida);
+                    break;
+                case 37:
+                    setClasificacion(clasificaciones.flujoEntrada);
                     break;
             }
         }

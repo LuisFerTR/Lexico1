@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-// Requerimiento 1: Separar el nombre del archivo y el directorio en el constructor Lexico(string)
-// Requerimiento 2: Validar en el constructor Lexico(string) que la extensión del archivo deba de ser
-// cpp y levantar una excepción en caso contrario.
-// Requerimiento 3: Identificar errores sintácticos con línea y caracter y grabarlos en el log.
-// Requerimiento 4: Agregar el token flujo de entrada (<<) y flujo de salida (>>) en el análisis léxico.
-// Requerimiento 5: Implementar el if.
+// ✅ Requerimiento 1: Separar el nombre del archivo y el directorio en el constructor Lexico(string)        
+// ✅ Requerimiento 2: Validar en el constructor Lexico(string) que la extensión del archivo deba de ser    
+//                     cpp y levantar una excepción en caso contrario.                                                  
+// ❌ Requerimiento 3: Identificar errores sintácticos con línea y caracter y grabarlos en el log.          
+// ✅ Requerimiento 4: Agregar el token flujo de entrada (<<) y flujo de salida (>>) en el análisis léxico. 
+// ✅ Requerimiento 5: Implementar el if.
 
 namespace sintaxis3
 {
@@ -33,6 +33,10 @@ namespace sintaxis3
         // Libreria -> (#include <identificador.h> Libreria) ?
         private void Libreria()
         {
+            if (getContenido() == "")
+            {
+
+            }
             if (getContenido() == "#")
             {
                 match("#");
@@ -52,7 +56,7 @@ namespace sintaxis3
             }
         }
 
-        // Main -> void main() { (Variables)? Instrucciones } 
+        // Main -> tipoDato main() BloqueInstrucciones 
         private void Main()
         {
             match(clasificaciones.tipoDato);
@@ -73,7 +77,7 @@ namespace sintaxis3
             match(clasificaciones.finBloque);
         }
 
-        // Lista_IDs -> identificador (,Lista_IDs)?
+        // Lista_IDs -> identificador (,Lista_IDs)? 
         private void Lista_IDs()
         {
             match(clasificaciones.identificador);
@@ -93,13 +97,17 @@ namespace sintaxis3
             match(clasificaciones.finSentencia);           
         }
 
-        // Instruccion -> (inicializacion | printf(cadena | identificador | numero)) ;
+        // Instruccion -> (If | cin | cout | const | Variables | asignacion) ;
         private void Instruccion()
         {
-            if (getContenido() == "cin")
+            if (getContenido() == "if")
+            {
+                If();
+            }
+            else if (getContenido() == "cin")
             {
                 match("cin");
-                match(">");
+                match(">>");
                 match(clasificaciones.identificador);
                 match(clasificaciones.finSentencia);
             }
@@ -168,14 +176,14 @@ namespace sintaxis3
             {
                 match(clasificaciones.cadena);
             }
-            
+         
             match(clasificaciones.finSentencia);
         }
 
         // ListaFlujoSalida -> << cadena | identificador | numero (ListaFlujoSalida)?
         private void ListaFlujoSalida()
         {
-            match("<");
+            match("<<");
 
             if (getClasificacion() == clasificaciones.numero)
             {
@@ -190,14 +198,34 @@ namespace sintaxis3
                 match(clasificaciones.identificador);
             }
 
-            if (getContenido() == "<")
+            if (getContenido() == "<<")
             {
                 ListaFlujoSalida();
             }
         }
 
-        // if -> if (Condicion) BloqueInstrucciones (else BloqueInstrucciones)? 
+        // If -> if (Condicion) { BloqueInstrucciones } (else BloqueInstrucciones)?
+        private void If()
+        {
+            match("if");
+            match("(");
+            Condicion();
+            match(")");
+            BloqueInstrucciones();
 
-        // Condicion -> identificador operadorRelacional identificador 
+            if (getContenido() == "else")
+            {
+                match("else");
+                BloqueInstrucciones();
+            }
+        }
+
+        // Condicion -> identificador operadorRelacional identificador
+        private void Condicion()
+        {
+            match(clasificaciones.identificador);
+            match(clasificaciones.operadorRelacional);
+            match(clasificaciones.identificador);
+        }
     }
 }
