@@ -6,7 +6,7 @@ namespace sintaxis3
 {
     class Sintaxis: Lexico
     {
-        int caracterAnterior;
+        protected int caracterAnterior;
         public Sintaxis()
         {
             Console.WriteLine("Iniciando analisis sintactico.");
@@ -26,13 +26,12 @@ namespace sintaxis3
             // Console.WriteLine(getContenido() + " = " + espera);
             if (espera == getContenido())
             {                
-                NextToken(); 
+                NextToken();
+                caracterAnterior = caracter;
             }
             else
             {
-                string mensaje = String.Format("Error de sintaxis linea {0} caracter {1}: " +
-                                               "Se espera un {2}", linea, caracter, espera);
-                throw new Exception(mensaje);
+                errorSintactico(linea, caracter, espera);
             }
         }
 
@@ -41,20 +40,30 @@ namespace sintaxis3
             // Console.WriteLine(getContenido() + " = " + espera);
             if (espera == getClasificacion())
             {
-                caracterAnterior = caracter;
                 NextToken();                
             }
             else
             {
-                int lineaError = linea;
-                if(espera == clasificaciones.finSentencia || espera == clasificaciones.finBloque)
-                {
-                    lineaError--;
-                }
-                string mensaje = String.Format("Error de sintaxis linea {0} caracter {1}: " +
-                                               "Se espera un {2}", linea, caracterAnterior, espera);
-                throw new Exception(mensaje);
+                errorSintactico(linea, caracterAnterior, espera);
             }
+        }
+
+        protected void errorSintactico(int linea, int caracter, string espera)
+        {
+            string mensaje = String.Format("Error de sintaxis linea {0} caracter {1}: " +
+                                               "Se espera un {2}", linea, caracter, espera);
+
+            bitacora.WriteLine(mensaje);
+            throw new Exception(mensaje);
+        }
+
+        protected void errorSintactico(int linea, int caracter, clasificaciones espera)
+        {
+            string mensaje = String.Format("Error de sintaxis linea {0} caracter {1}: " +
+                                               "Se espera un {2}", linea, caracterAnterior, espera);
+
+            bitacora.WriteLine(mensaje);
+            throw new Exception(mensaje);
         }
     }
 }

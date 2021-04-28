@@ -125,7 +125,7 @@ namespace sintaxis3
             {
                 Variables();
             }            
-            else
+            else if (getClasificacion() == clasificaciones.identificador)
             {
                 match(clasificaciones.identificador);
                 match(clasificaciones.asignacion);
@@ -145,7 +145,10 @@ namespace sintaxis3
 
                 match(clasificaciones.finSentencia);
             }
-
+            else
+            {
+                errorSintactico(linea, caracterAnterior, clasificaciones.finBloque);
+            }
             
         }
 
