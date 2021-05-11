@@ -1,19 +1,31 @@
 #include <stdio.h>
-#include <stdlib>
-#include <math>
-#include <graphics.h>
+#include <stdlib.h>
+#include <math.h>
 
-int main() 
-{	
-	const float pi = 3.1415926;
-	mensaje = "hola mundo";
-	char transaccion;	
-	a = b;
-	printf("hola mundo");
-	printf(pi);
-	const string mensaje = "hola mundo";
-	int a, b, c, d;
-	printf(3.5e-8);
-	const int r = 15;
-	float radio, pi, h;
+int main()
+{
+    x26 = (3 + 5) * 8 - (10 - 4) / 2;
+    const float pi = 3.1415926;
+    int radio = 3 + 5, altura = radio*3;
+    cout << "Radio: ";
+    cin >> radio;
+    cout << "Altura: ";
+    cin >> altura;
+
+    float Volumen;
+
+    Volumen = pi;
+
+    cout << Volumen;
+
+    if ((Volumen + 5)*8 > radio/10) 
+    {
+        string msg;
+        msg = "hola mundo";
+    }
+    else
+    {
+        Volumen = radio;
+    }
+  
 }

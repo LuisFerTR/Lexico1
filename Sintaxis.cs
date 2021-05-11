@@ -40,6 +40,7 @@ namespace sintaxis3
             // Console.WriteLine(getContenido() + " = " + espera);
             if (espera == getClasificacion())
             {
+                caracterAnterior = caracter;
                 NextToken();                
             }
             else
@@ -60,7 +61,7 @@ namespace sintaxis3
         protected void errorSintactico(int linea, int caracter, clasificaciones espera)
         {
             string mensaje = String.Format("Error de sintaxis linea {0} caracter {1}: " +
-                                               "Se espera un {2}", linea, caracterAnterior, espera);
+                                               "Se espera un {2}", linea, caracter, espera);
 
             bitacora.WriteLine(mensaje);
             throw new Exception(mensaje);

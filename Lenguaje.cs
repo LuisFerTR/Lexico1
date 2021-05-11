@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-// ✅ Requerimiento 1: Separar el nombre del archivo y el directorio en el constructor Lexico(string)        
-// ✅ Requerimiento 2: Validar en el constructor Lexico(string) que la extensión del archivo deba de ser    
-//                     cpp y levantar una excepción en caso contrario.                                                  
-// ❌ Requerimiento 3: Identificar errores sintácticos con línea y caracter y grabarlos en el log.          
-// ✅ Requerimiento 4: Agregar el token flujo de entrada (<<) y flujo de salida (>>) en el análisis léxico. 
-// ✅ Requerimiento 5: Implementar el if.
+// Requerimiento 1: Poder asignar una expresión matemática al momento de declarar una variable o una
+//                  lista de variables.
+// Requerimiento 2: En la condicion debe ir Expresion operadorRelacional Expresion
+// Requerimiento 3: Implementar el For 
+// Requerimiento 4: Implementar el While
+// Requerimiento 5: Implementar el Do-While
 
 namespace sintaxis3
 {
@@ -130,24 +130,20 @@ namespace sintaxis3
                 match(clasificaciones.identificador);
                 match(clasificaciones.asignacion);
 
-                if (getClasificacion() == clasificaciones.numero)
-                {
-                    match(clasificaciones.numero);
-                }
-                else if (getClasificacion() == clasificaciones.cadena)
+                if (getClasificacion() == clasificaciones.cadena)
                 {
                     match(clasificaciones.cadena);
                 }
                 else
                 {
-                    match(clasificaciones.identificador);
-                }
+                    Expresion();
+                }                
 
                 match(clasificaciones.finSentencia);
             }
             else
             {
-                errorSintactico(linea, caracterAnterior, clasificaciones.finBloque);
+                errorSintactico(linea, caracter, clasificaciones.finBloque);
             }
             
         }
@@ -230,5 +226,59 @@ namespace sintaxis3
             match(clasificaciones.operadorRelacional);
             match(clasificaciones.identificador);
         }
+
+        // x26 = (3+5)*8-(10-4)/2;
+        // Expresion -> Termino MasTermino 
+        private void Expresion()
+        {
+            Termino();
+            MasTermino();
+        }
+        // MasTermino -> (operadorTermino Termino)?
+        private void MasTermino()
+        {
+            if (getClasificacion() == clasificaciones.operadorTermino)
+            {
+                match(clasificaciones.operadorTermino);
+                Termino();
+            }
+        }
+        // Termino -> Factor PorFactor
+        private void Termino()
+        {
+            Factor();
+            PorFactor();
+        }
+        // PorFactor -> (operadorFactor Factor)?
+        private void PorFactor()
+        {
+            if (getClasificacion() == clasificaciones.operadorFactor)
+            {
+                match(clasificaciones.operadorFactor);
+                Factor();
+            }
+        }
+        // Factor -> identificador | numero | ( Expresion )
+        private void Factor()
+        {
+            if (getClasificacion() == clasificaciones.identificador)
+            {
+                match(clasificaciones.identificador);
+            }
+            else if (getClasificacion() == clasificaciones.numero)
+            {
+                match(clasificaciones.numero);
+            }
+            else
+            {
+                match("(");
+                Expresion();
+                match(")");
+            }
+        }
+
+        // For -> for (identificador = Expresion; Condicion; identificador incrementoTermino) BloqueInstrucciones
+        // While -> while (Condicion) BloqueInstrucciones
+        // DoWhile -> do BloqueInstrucciones while (Condicion);
     }
 }

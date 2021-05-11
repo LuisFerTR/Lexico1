@@ -91,13 +91,13 @@ namespace sintaxis3
             Console.WriteLine("Compilando " + nombreArchivo);
             Console.WriteLine("Iniciando analisis lexico.");
 
-            if (File.Exists(nombre))
+            if (Path.GetExtension(nombre) != ".cpp")
             {
-                if (Path.GetExtension(nombre) != ".cpp")
-                {
-                    throw new Exception(String.Format("El archivo {0} no es un archivo cpp.", nombreArchivo));
-                }
+                throw new Exception(String.Format("El archivo {0} no es un archivo cpp.", nombreArchivo));
+            }
 
+            if (File.Exists(nombre))
+            {                
                 archivo = new StreamReader(nombre);
 
                 string log = Path.ChangeExtension(nombre, "log");
