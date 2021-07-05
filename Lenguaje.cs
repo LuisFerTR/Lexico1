@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-// Requerimiento 1: Poder asignar una expresión matemática al momento de declarar una variable o una
-//                  lista de variables.
-// Requerimiento 2: En la condicion debe ir Expresion operadorRelacional Expresion
-// Requerimiento 3: Implementar el For 
-// Requerimiento 4: Implementar el While
-// Requerimiento 5: Implementar el Do-While
+// ✔ Requerimiento 1: Poder asignar una expresión matemática al momento de declarar una variable o una
+//                     lista de variables.
+// ✔ Requerimiento 2: En la condicion debe ir Expresion operadorRelacional Expresion
+// ✔ Requerimiento 3: Implementar el For 
+// ✔ Requerimiento 4: Implementar el While
+// ✔ Requerimiento 5: Implementar el DoWhile
 
 namespace sintaxis3
 {
@@ -77,10 +77,16 @@ namespace sintaxis3
             match(clasificaciones.finBloque);
         }
 
-        // Lista_IDs -> identificador (,Lista_IDs)? 
+        // Lista_IDs -> identificador (= Expresion)? (,Lista_IDs)? 
         private void Lista_IDs()
         {
             match(clasificaciones.identificador);
+
+            if (getClasificacion() == clasificaciones.asignacion)
+            {
+                match(clasificaciones.asignacion);
+                Expresion();
+            }
 
             if (getContenido() == ",")
             {
@@ -100,7 +106,19 @@ namespace sintaxis3
         // Instruccion -> (If | cin | cout | const | Variables | asignacion) ;
         private void Instruccion()
         {
-            if (getContenido() == "if")
+            if (getContenido() == "do")
+            {
+                DoWhile();
+            }
+            else if (getContenido() == "while")
+            {
+                While();
+            }
+            else if (getContenido() == "for")
+            {
+                For();
+            }
+            else if (getContenido() == "if")
             {
                 If();
             }
@@ -219,12 +237,12 @@ namespace sintaxis3
             }
         }
 
-        // Condicion -> identificador operadorRelacional identificador
+        // Condicion -> Expresion operadorRelacional Expresion
         private void Condicion()
         {
-            match(clasificaciones.identificador);
+            Expresion();
             match(clasificaciones.operadorRelacional);
-            match(clasificaciones.identificador);
+            Expresion();
         }
 
         // x26 = (3+5)*8-(10-4)/2;
@@ -278,7 +296,53 @@ namespace sintaxis3
         }
 
         // For -> for (identificador = Expresion; Condicion; identificador incrementoTermino) BloqueInstrucciones
+        private void For()
+        {
+            match("for");
+
+            match("(");
+
+            match(clasificaciones.identificador);
+            match(clasificaciones.asignacion);
+            Expresion();
+            match(clasificaciones.finSentencia);
+
+            Condicion();
+            match(clasificaciones.finSentencia);
+
+            match(clasificaciones.identificador);
+            match(clasificaciones.incrementoTermino);
+
+            match(")");
+
+            BloqueInstrucciones();
+        }
+
         // While -> while (Condicion) BloqueInstrucciones
+        private void While()
+        {
+            match("while");
+
+            match("(");
+            Condicion();
+            match(")");
+
+            BloqueInstrucciones();
+        }
+        
         // DoWhile -> do BloqueInstrucciones while (Condicion);
+        private void DoWhile()
+        {
+            match("do");
+
+            BloqueInstrucciones();
+
+            match("while");
+
+            match("(");
+            Condicion();
+            match(")");
+            match(clasificaciones.finSentencia);
+        }
     }
 }
